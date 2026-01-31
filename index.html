@@ -168,6 +168,24 @@
       border-color: #b9e2ff;
     }
 
+    .appstore-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 14px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .appstore-badge:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 30px rgba(12, 62, 90, 0.18);
+    }
+
+    .appstore-badge img {
+      height: 44px;
+      display: block;
+      border-radius: 14px;
+    }
+
     .hero-metrics {
       display: flex;
       gap: 18px;
@@ -291,6 +309,7 @@
       border-radius: var(--radius);
       padding: 22px;
       box-shadow: 0 12px 30px rgba(12, 62, 90, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .card h3 {
@@ -300,6 +319,11 @@
     .card p {
       color: var(--ink-soft);
       margin: 0;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 34px rgba(12, 62, 90, 0.14);
     }
 
     .pill {
@@ -454,7 +478,7 @@
         <div class="logo-mark">AB</div>
         AquaBuddy
       </div>
-      <a class="nav-cta" href="#download">Download AquaBuddy</a>
+      <a class="nav-cta" href="https://apps.apple.com/us/app/aquatrack-water-tracker/id6748549976">Download AquaBuddy</a>
     </header>
 
     <section class="hero">
@@ -467,7 +491,9 @@
           and stay consistent with widgets and Apple Watch support.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#download">Get it on the App Store</a>
+          <a class="appstore-badge" href="https://apps.apple.com/us/app/aquatrack-water-tracker/id6748549976" aria-label="Download on the App Store">
+            <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" />
+          </a>
           <a class="btn btn-ghost" href="#features">Explore features</a>
         </div>
         <div class="hero-metrics">
@@ -614,7 +640,10 @@
           AquaBuddy is built to be simple, respectful, and effective — so you can focus on drinking more water and
           feeling better every day.
         </div>
-        <a class="btn btn-primary" href="#">Download AquaBuddy</a>
+        <a class="btn btn-primary" href="https://apps.apple.com/us/app/aquatrack-water-tracker/id6748549976">Download AquaBuddy</a>
+        <a class="appstore-badge" href="https://apps.apple.com/us/app/aquatrack-water-tracker/id6748549976" aria-label="Download on the App Store">
+          <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" />
+        </a>
       </div>
     </section>
 
