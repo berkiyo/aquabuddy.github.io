@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AquaBuddy — Private Water Tracker</title>
+  <meta name="description" content="AquaBuddy is a simple, private water tracker that helps you stay hydrated, build better habits, and feel your best — without accounts, ads, or distractions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #eaf7ff;
+      --bg-2: #f6fbff;
+      --ink: #0b1d2b;
+      --ink-soft: #33556b;
+      --accent: #2aa6ff;
+      --accent-2: #5cd2ff;
+      --deep: #0a84ff;
+      --card: #ffffff;
+      --stroke: #d7ecf8;
+      --shadow: 0 20px 60px rgba(12, 62, 90, 0.15);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--ink);
+      background: radial-gradient(1200px 800px at 85% -10%, #cdefff 0%, transparent 60%),
+                  radial-gradient(900px 600px at -10% 15%, #d8f4ff 0%, transparent 55%),
+                  linear-gradient(180deg, var(--bg), var(--bg-2));
+      overflow-x: hidden;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .glow {
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(42, 166, 255, 0.35), transparent 60%);
+      filter: blur(10px);
+      right: -120px;
+      top: 240px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 6vw;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+
+    .logo-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0a84ff, #64d2ff);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(14, 116, 211, 0.35);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: #0a84ff;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(10, 132, 255, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 30px rgba(10, 132, 255, 0.35);
+    }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 48px;
+      padding: 36px 6vw 80px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      background: rgba(42, 166, 255, 0.12);
+      color: #0a84ff;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .hero h1 {
+      font-family: "Fraunces", serif;
+      font-size: clamp(2.8rem, 4vw, 4.2rem);
+      margin: 18px 0 14px;
+      line-height: 1.05;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      margin: 0 0 22px;
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .btn {
+      border: 1px solid transparent;
+      padding: 14px 20px;
+      border-radius: 16px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: #0a84ff;
+      color: white;
+      box-shadow: 0 20px 40px rgba(10, 132, 255, 0.25);
+    }
+
+    .btn-ghost {
+      background: white;
+      color: #0a84ff;
+      border-color: #b9e2ff;
+    }
+
+    .hero-metrics {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .metric {
+      background: white;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      box-shadow: 0 10px 24px rgba(12, 62, 90, 0.08);
+      min-width: 140px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.1rem;
+    }
+
+    .phone {
+      position: relative;
+      max-width: 420px;
+      margin-left: auto;
+      background: linear-gradient(180deg, #e8f7ff, #ffffff);
+      border-radius: 36px;
+      padding: 22px;
+      border: 1px solid #d7ecf8;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transform: translateY(0);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border-radius: 30px;
+      background: linear-gradient(160deg, #0a84ff 0%, #64d2ff 45%, #f3fbff 100%);
+      opacity: 0.2;
+    }
+
+    .phone-inner {
+      position: relative;
+      background: white;
+      border-radius: 28px;
+      padding: 20px;
+      border: 1px solid #d7ecf8;
+    }
+
+    .phone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .phone-card {
+      background: linear-gradient(140deg, #0a84ff, #5cd2ff);
+      color: white;
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 12px 24px rgba(12, 62, 90, 0.2);
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.18);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f5fbff;
+      color: #0b1d2b;
+      font-weight: 500;
+    }
+
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 80px 6vw;
+    }
+
+    .section-title {
+      font-family: "Fraunces", serif;
+      font-size: clamp(2rem, 3vw, 3rem);
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      color: var(--ink-soft);
+      max-width: 720px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 22px;
+      margin-top: 32px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 12px 30px rgba(12, 62, 90, 0.08);
+    }
+
+    .card h3 {
+      margin: 8px 0 10px;
+    }
+
+    .card p {
+      color: var(--ink-soft);
+      margin: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #e6f7ff;
+      color: #0a84ff;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .pro {
+      background: linear-gradient(160deg, #0a84ff 0%, #5cd2ff 60%, #c8f1ff 100%);
+      color: white;
+      border-radius: 36px;
+      padding: 60px;
+      margin: 0 6vw;
+      box-shadow: 0 24px 50px rgba(12, 62, 90, 0.25);
+    }
+
+    .pro-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 26px;
+    }
+
+    .pro-item {
+      background: rgba(255, 255, 255, 0.12);
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .privacy {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 32px;
+      align-items: center;
+    }
+
+    .privacy ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .privacy li {
+      background: #ffffff;
+      border: 1px solid var(--stroke);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 600;
+    }
+
+    .cta {
+      text-align: center;
+    }
+
+    .cta-box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 38px 40px;
+      background: white;
+      border-radius: 28px;
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+    }
+
+    footer {
+      padding: 40px 6vw 60px;
+      color: var(--ink-soft);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      border-top: 1px solid #dbeef9;
+    }
+
+    footer a {
+      color: #0a84ff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .reveal {
+      animation: reveal 0.8s ease forwards;
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    .reveal:nth-child(2) { animation-delay: 0.12s; }
+    .reveal:nth-child(3) { animation-delay: 0.24s; }
+    .reveal:nth-child(4) { animation-delay: 0.36s; }
+
+    @keyframes reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .phone {
+        margin: 0 auto;
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .privacy {
+        grid-template-columns: 1fr;
+      }
+
+      .pro {
+        padding: 46px 28px;
+      }
+
+      .pro-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="glow"></div>
+    <header>
+      <div class="logo">
+        <div class="logo-mark">AB</div>
+        AquaBuddy
+      </div>
+      <a class="nav-cta" href="#download">Download AquaBuddy</a>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="badge">Private by design • Offline-first</div>
+        <h1>Hydration that feels effortless.</h1>
+        <p>
+          AquaBuddy is a simple, private water tracker that helps you stay hydrated, build better habits,
+          and feel your best — without accounts, ads, or distractions. Track daily intake, set personal goals,
+          and stay consistent with widgets and Apple Watch support.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#download">Get it on the App Store</a>
+          <a class="btn btn-ghost" href="#features">Explore features</a>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <strong>0% tracking</strong>
+            No ads or analytics
+          </div>
+          <div class="metric">
+            <strong>100% offline</strong>
+            Data stays on device
+          </div>
+          <div class="metric">
+            <strong>1 tap</strong>
+            Fast drink logging
+          </div>
+        </div>
+      </div>
+
+      <div class="phone">
+        <div class="phone-inner">
+          <div class="phone-header">
+            <strong>Today</strong>
+            <span class="chip">Goal 2.5L</span>
+          </div>
+          <div class="phone-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.9rem; opacity: 0.8;">Water intake</div>
+                <div style="font-size: 1.8rem; font-weight: 700;">1.8L</div>
+              </div>
+              <div style="font-size: 2.2rem; font-weight: 700;">72%</div>
+            </div>
+          </div>
+          <div class="list">
+            <div class="list-item">
+              <span>Water</span>
+              <span>350ml</span>
+            </div>
+            <div class="list-item">
+              <span>Green tea</span>
+              <span>250ml</span>
+            </div>
+            <div class="list-item">
+              <span>Coffee</span>
+              <span>180ml</span>
+            </div>
+            <div class="list-item">
+              <span>Water</span>
+              <span>300ml</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div>
+        <div class="pill">Core features</div>
+        <div class="section-title">Stay hydrated without the noise.</div>
+        <div class="section-subtitle">
+          AquaBuddy keeps everything focused on one thing: feeling better every day. Log drinks in seconds,
+          understand your habits, and stay on track with a clean, calming interface.
+        </div>
+      </div>
+      <div class="grid grid-3">
+        <div class="card reveal">
+          <span class="pill">Daily tracking</span>
+          <h3>Daily intake at a glance</h3>
+          <p>See progress instantly with a simple dashboard that highlights what you’ve had and what’s left.</p>
+        </div>
+        <div class="card reveal">
+          <span class="pill">Fast logging</span>
+          <h3>Log a drink in one tap</h3>
+          <p>Quick add buttons and smart defaults help you track without interrupting your day.</p>
+        </div>
+        <div class="card reveal">
+          <span class="pill">Drink variety</span>
+          <h3>Multiple drink types</h3>
+          <p>Track water, coffee, tea, juice, and custom drinks so your log feels natural and flexible.</p>
+        </div>
+        <div class="card reveal">
+          <span class="pill">Goals</span>
+          <h3>Personal hydration goals</h3>
+          <p>Set a daily target that fits you and watch your streaks build over time.</p>
+        </div>
+        <div class="card reveal">
+          <span class="pill">Well-being</span>
+          <h3>Mood & water quality</h3>
+          <p>Capture how you feel and note water quality to spot patterns that support your best days.</p>
+        </div>
+        <div class="card reveal">
+          <span class="pill">Devices</span>
+          <h3>Widgets + Apple Watch</h3>
+          <p>Stay consistent with Home Screen widgets and wrist-friendly logging on Apple Watch.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="pro">
+        <div class="pill" style="background: rgba(255, 255, 255, 0.2); color: white;">AquaBuddy Pro</div>
+        <div class="section-title" style="color: white;">Go deeper with intelligent hydration tools.</div>
+        <div style="opacity: 0.9; max-width: 720px;">
+          Unlock smart reminders, detailed trends, and personalization that adapts to your daily rhythm.
+          AquaBuddy Pro adds powerful insights while keeping your data local and private.
+        </div>
+        <div class="pro-grid">
+          <div class="pro-item">Smart hydration reminders</div>
+          <div class="pro-item">Detailed history and trends</div>
+          <div class="pro-item">Helpful hydration insights</div>
+          <div class="pro-item">Custom themes and personalization</div>
+          <div class="pro-item">Apple Watch support</div>
+          <div class="pro-item">Home Screen widgets</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="privacy">
+        <div>
+          <div class="pill">Privacy first</div>
+          <div class="section-title">Your data never leaves your device.</div>
+          <div class="section-subtitle">
+            AquaBuddy works fully offline and never asks for an account. No ads, no tracking, no data collection —
+            just a fast, respectful water tracker that puts you first.
+          </div>
+        </div>
+        <div>
+          <ul>
+            <li>No account required</li>
+            <li>Works fully offline</li>
+            <li>No ads, no tracking, no data collection</li>
+            <li>All data stays securely on your device</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="download" class="cta">
+      <div class="cta-box">
+        <div class="pill">Download today</div>
+        <div class="section-title">Make hydration effortless.</div>
+        <div class="section-subtitle">
+          AquaBuddy is built to be simple, respectful, and effective — so you can focus on drinking more water and
+          feeling better every day.
+        </div>
+        <a class="btn btn-primary" href="#">Download AquaBuddy</a>
+      </div>
+    </section>
+
+    <footer>
+      <div>© 2026 AquaBuddy. All rights reserved.</div>
+      <div>
+        <a href="https://polydez.com/aquabuddy">Privacy Policy</a>
+        &nbsp;·&nbsp;
+        <a href="https://polydez.com/aquabuddy">Terms of Service</a>
+        &nbsp;·&nbsp;
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula">EULA</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
